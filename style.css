@@ -1,0 +1,118 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body { width: 100%; height: 100%; overflow: hidden; font-family: "Microsoft YaHei", "SimSun", sans-serif; user-select: none; }
+
+.hidden { display: none !important; }
+
+.screen { position: fixed; inset: 0; }
+
+/* ---------- 开机 ---------- */
+#boot { background: #000; color: #bbb; font-family: Consolas, monospace; font-size: 14px; padding: 30px; line-height: 1.8; }
+#bios { white-space: pre-wrap; }
+#xpbar { position: absolute; bottom: 60px; left: 20%; right: 20%; height: 22px; background: #0a3d62; border: 1px solid #0a3d62; border-radius: 4px; overflow: hidden; }
+#xpbar-fill { height: 100%; width: 0%; background: linear-gradient(180deg, #7ee0ff, #1ba0e0); }
+#boot-tip { position: absolute; bottom: 20px; width: 100%; text-align: center; color: #555; font-size: 12px; }
+
+/* ---------- 登录 ---------- */
+#login { background: linear-gradient(180deg, #b8e8fc 0%, #4fa8e8 60%, #2a6fc0 100%); display: flex; align-items: center; justify-content: center; }
+.login-box { width: 300px; background: rgba(255,255,255,.92); border-radius: 8px; padding: 20px; text-align: center; box-shadow: 0 8px 30px rgba(0,0,0,.3); }
+.login-title { font-size: 18px; margin-bottom: 15px; color: #1e3c72; }
+.user-avatar { font-size: 64px; }
+.user-name { color: #555; margin: 8px 0 16px; }
+
+/* ---------- 桌面 ---------- */
+#desktop { background: linear-gradient(135deg, #3d8bd9 0%, #0e4e92 40%, #0a3a70 100%); }
+#desktop-icons { position: absolute; top: 10px; left: 10px; display: flex; flex-direction: column; gap: 8px; z-index: 1; }
+.desk-icon { width: 76px; padding: 8px 4px; display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; border-radius: 4px; border: 1px solid transparent; }
+.desk-icon .ico { font-size: 36px; }
+.desk-icon span:last-child { color: #fff; font-size: 12px; text-shadow: 1px 1px 2px rgba(0,0,0,.6); text-align: center; }
+.desk-icon:hover { background: rgba(255,255,255,.15); border-color: rgba(255,255,255,.4); }
+.desk-icon.selected { background: rgba(255,255,255,.25); border-color: #fff; }
+
+/* ---------- 窗口 ---------- */
+.window { position: absolute; min-width: 320px; background: #ece9d8; border-radius: 8px 8px 3px 3px; box-shadow: 2px 4px 16px rgba(0,0,0,.4); display: flex; flex-direction: column; }
+.window.active { z-index: 100; }
+.window.inactive { z-index: 50; }
+.win-titlebar { background: linear-gradient(180deg, #0a5ad2, #1a7ce0); color: #fff; padding: 5px 8px; font-size: 13px; border-radius: 8px 8px 0 0; cursor: move; display: flex; align-items: center; gap: 6px; }
+.window.inactive .win-titlebar { background: linear-gradient(180deg, #7a9dc4, #86aac9); }
+.win-title { flex: 1; overflow: hidden; white-space: nowrap; }
+.win-btn { width: 18px; height: 18px; line-height: 16px; text-align: center; background: #e8e0d0; color: #000; border: 1px solid #fff; border-radius: 3px; font-size: 11px; cursor: pointer; }
+.win-btn:hover { background: #c9b998; }
+.win-body { padding: 10px; overflow: auto; flex: 1; font-size: 13px; color: #222; user-select: text; }
+
+/* ---------- 任务栏 ---------- */
+#taskbar { position: fixed; bottom: 0; left: 0; right: 0; height: 36px; background: linear-gradient(180deg, #245edb, #3f8cf3 6%, #185ac5 90%, #2664d5); display: flex; align-items: center; padding: 0 4px; z-index: 1000; }
+#btn-start { background: linear-gradient(180deg, #3da03d, #1a7d1a); color: #fff; border: none; border-radius: 4px; padding: 4px 12px; font-size: 13px; cursor: pointer; font-weight: bold; }
+#task-windows { display: flex; gap: 4px; margin-left: 10px; flex: 1; overflow-x: auto; }
+.task-btn { background: rgba(255,255,255,.15); color: #fff; border: 1px solid rgba(255,255,255,.3); border-radius: 3px; padding: 3px 12px; font-size: 12px; cursor: pointer; max-width: 140px; white-space: nowrap; overflow: hidden; }
+.task-btn.active { background: rgba(255,255,255,.35); }
+#clock { color: #fff; font-size: 12px; padding: 0 8px; }
+
+/* ---------- 开始菜单 ---------- */
+#startmenu { position: fixed; bottom: 36px; left: 4px; z-index: 1100; }
+#startmenu-panel { background: #d8e4f8; border: 1px solid #7da2d1; border-radius: 6px 6px 0 0; padding: 6px 0; box-shadow: 2px -2px 10px rgba(0,0,0,.3); }
+.sm-item { padding: 8px 24px 8px 14px; cursor: pointer; font-size: 13px; }
+.sm-item:hover { background: #316ac5; color: #fff; }
+
+/* ---------- XP 控件 ---------- */
+.xp-btn { background: linear-gradient(180deg, #fdfdfd, #ece9d8); border: 1px solid #8b8b8b; border-radius: 3px; padding: 4px 16px; font-size: 13px; cursor: pointer; }
+.xp-btn:hover { border-color: #f1b44c; }
+.xp-btn:active { background: linear-gradient(180deg, #ece9d8, #fdfdfd); }
+.xp-input { border: 1px solid #8b8b8b; padding: 4px 6px; font-size: 13px; border-radius: 2px; outline: none; }
+.xp-input:focus { border-color: #1a7ce0; }
+.wrong { border-color: #c00 !important; background: #ffe8e8; }
+
+/* ---------- 对话框 ---------- */
+.dialog { position: fixed; inset: 0; background: rgba(0,0,0,.35); display: flex; align-items: center; justify-content: center; z-index: 2000; }
+.dialog-box { width: 340px; max-width: 90vw; background: #ece9d8; border-radius: 8px; box-shadow: 0 6px 24px rgba(0,0,0,.4); }
+.dialog-title { background: linear-gradient(180deg, #0a5ad2, #1a7ce0); color: #fff; padding: 6px 10px; font-size: 13px; border-radius: 8px 8px 0 0; }
+.dialog-body { padding: 14px; font-size: 13px; line-height: 1.8; max-height: 60vh; overflow: auto; user-select: text; }
+.dialog-box .xp-btn { margin: 0 10px 10px 10px; float: right; }
+
+/* ---------- 文件列表 ---------- */
+.file-list { display: flex; flex-direction: column; gap: 2px; }
+.file-item { padding: 6px 8px; cursor: pointer; border-radius: 3px; display: flex; gap: 8px; align-items: center; }
+.file-item:hover { background: #316ac5; color: #fff; }
+
+/* ---------- 聊天记录 ---------- */
+.chat-wrap { background: #f6f6f6; }
+.chat-line { margin-bottom: 8px; }
+.chat-name { font-size: 11px; color: #888; margin-bottom: 2px; }
+.chat-bubble { display: inline-block; max-width: 85%; padding: 6px 10px; border-radius: 8px; background: #fff; border: 1px solid #ddd; line-height: 1.6; word-break: break-all; font-family: Consolas, monospace; }
+.chat-line.mine .chat-bubble { background: #cfe8ff; }
+.chat-line.other .chat-bubble { background: #fff; }
+
+/* ---------- 浏览器 ---------- */
+.browser-bar { display: flex; gap: 6px; padding-bottom: 8px; }
+.browser-bar .xp-input { flex: 1; }
+.browser-body { border: 1px solid #ccc; background: #fff; padding: 12px; min-height: 260px; line-height: 1.9; user-select: text; }
+.link { color: #1a5ad2; text-decoration: underline; cursor: pointer; }
+.link:hover { color: #c00; }
+.browser-title { font-size: 15px; font-weight: bold; margin-bottom: 8px; }
+.morse-line { font-family: Consolas, monospace; background: #f4f4f4; padding: 2px 6px; display: inline-block; }
+
+/* ---------- 相册 ---------- */
+.photo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.photo { border: 1px solid #999; padding: 6px; background: #fff; cursor: pointer; }
+.photo .photo-img { height: 90px; display: flex; align-items: center; justify-content: center; font-size: 34px; border: 1px solid #ddd; margin-bottom: 4px; }
+.photo .photo-cap { font-size: 12px; text-align: center; color: #444; }
+
+/* ---------- 解码器 ---------- */
+.decoder-tabs { display: flex; gap: 6px; margin-bottom: 8px; }
+.tab { padding: 4px 12px; border: 1px solid #999; border-radius: 3px; cursor: pointer; background: #f0f0e8; font-size: 12px; }
+.tab.active { background: #316ac5; color: #fff; }
+.decoder-tab { display: none; }
+.decoder-tab.active { display: block; }
+.decoder-tab textarea { width: 100%; height: 90px; font-family: Consolas, monospace; font-size: 12px; border: 1px solid #999; padding: 6px; resize: none; user-select: text; }
+.decoder-out { width: 100%; min-height: 60px; border: 1px solid #999; background: #fff; padding: 6px; font-size: 12px; margin-top: 6px; font-family: Consolas, monospace; word-break: break-all; user-select: text; }
+.morse-table { font-size: 11px; color: #555; margin-top: 6px; line-height: 1.6; user-select: text; }
+
+/* ---------- 结局 ---------- */
+#ending { background: #000; color: #ddd; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 3000; }
+#ending-text { max-width: 640px; padding: 0 24px; font-size: 15px; line-height: 2.2; white-space: pre-wrap; font-family: "Microsoft YaHei", sans-serif; }
+.ending-btns { margin-top: 30px; display: flex; gap: 12px; }
+.ending-btns .xp-btn { font-size: 14px; padding: 8px 28px; }
+
+/* ---------- 照片属性对话框 ---------- */
+.photo-props { font-size: 12px; line-height: 2; }
+.photo-props .rot13-hint { font-family: Consolas, monospace; background: #f4f4f4; padding: 2px 6px; }

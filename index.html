@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>林远的旧电脑</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- 开机画面 -->
+<div id="boot" class="screen">
+  <div id="bios"></div>
+  <div id="xpbar"><div id="xpbar-fill"></div></div>
+  <div id="boot-tip">点击任意处跳过</div>
+</div>
+
+<!-- 登录画面 -->
+<div id="login" class="screen hidden">
+  <div class="login-box">
+    <div class="login-title">欢迎使用</div>
+    <div class="login-user">
+      <div class="user-avatar">🧑</div>
+      <div class="user-name">访客</div>
+    </div>
+    <button id="btn-login" class="xp-btn">进入</button>
+  </div>
+</div>
+
+<!-- 桌面 -->
+<div id="desktop" class="screen hidden">
+  <div id="desktop-icons">
+    <div class="desk-icon" data-app="mycomputer"><span class="ico">🖥️</span><span>我的电脑</span></div>
+    <div class="desk-icon" data-app="mydocs"><span class="ico">🗂️</span><span>我的文档</span></div>
+    <div class="desk-icon" data-app="chat"><span class="ico">💬</span><span>聊天记录</span></div>
+    <div class="desk-icon" data-app="recycle"><span class="ico">🗑️</span><span>回收站</span></div>
+    <div class="desk-icon" data-app="browser"><span class="ico">🌐</span><span>浏览器</span></div>
+    <div class="desk-icon" data-app="decoder"><span class="ico">🧮</span><span>解码器</span></div>
+  </div>
+  <div id="windows"></div>
+</div>
+
+<!-- 任务栏 -->
+<div id="taskbar" class="hidden">
+  <button id="btn-start" class="xp-btn">开始</button>
+  <div id="task-windows"></div>
+  <div id="clock"></div>
+</div>
+
+<!-- 开始菜单 -->
+<div id="startmenu" class="hidden">
+  <div id="startmenu-panel">
+    <div class="sm-item" data-open="mydocs">🗂️ 我的文档</div>
+    <div class="sm-item" data-open="chat">💬 聊天记录</div>
+    <div class="sm-item" data-open="browser">🌐 浏览器</div>
+    <div class="sm-item" data-open="decoder">🧮 解码器</div>
+    <div class="sm-item" id="sm-help">❓ 帮助</div>
+    <div class="sm-item" id="sm-restart">🔁 重新启动</div>
+  </div>
+</div>
+
+<!-- 全局提示对话框 -->
+<div id="help-dialog" class="dialog hidden">
+  <div class="dialog-box">
+    <div class="dialog-title">帮助</div>
+    <div id="help-text" class="dialog-body"></div>
+    <button id="help-close" class="xp-btn">知道了</button>
+  </div>
+</div>
+
+<!-- 结局画面 -->
+<div id="ending" class="screen hidden">
+  <div id="ending-text"></div>
+  <div class="ending-btns hidden">
+    <button id="btn-restart" class="xp-btn">重新开始</button>
+    <button id="btn-close-end" class="xp-btn">关闭</button>
+  </div>
+</div>
+
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
