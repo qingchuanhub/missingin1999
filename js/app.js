@@ -2,7 +2,7 @@
   "use strict";
 
   var DATA = window.GAME_DATA;
-  var SAVE_KEY = "linyuan_old_pc_v1";
+  var SAVE_KEY = "linyuan_old_pc_v2";
 
   var state = { flags: {} };
   var winCounter = 0;
@@ -73,7 +73,8 @@
       '<div class="window" id="' + id + '" style="left:' + (80 + (winCounter * 24) % 200) + "px;top:" + (50 + (winCounter * 20) % 180) + 'px;width:' + (opts.width || 460) + "px;" + (opts.height ? "height:" + opts.height + "px" : "") + '">' +
         '<div class="win-titlebar"><span class="win-title">' + opts.title + "</span>" +
           '<span class="win-btn" data-act="min">_</span>' +
-          '<span class="win-btn" data-act="close">&#10005;</span></div>' +
+          '<span class="win-btn" data-act="max">&#9649;</span>' +
+          '<span class="win-btn close" data-act="close">&#10005;</span></div>' +
         '<div class="win-body"></div>' +
       "</div>"
     );
@@ -88,6 +89,7 @@
     });
     w.querySelector('[data-act="close"]').addEventListener("click", function () { closeWindow(id); });
     w.querySelector('[data-act="min"]').addEventListener("click", function () { minimizeWindow(id); });
+    w.querySelector('[data-act="max"]').addEventListener("click", function () { maximizeWindow(id); });
     w.addEventListener("mousedown", function () { bringToFront(id); });
 
     bringToFront(id);
@@ -137,6 +139,28 @@
     windows[id].minimized = true;
     refreshTaskButtons(id);
   }
+  function maximizeWindow(id) {
+    var w = document.getElementById(id);
+    if (!w) return;
+    if (w.dataset.max === "1") {
+      var o = JSON.parse(w.dataset.orig);
+      w.style.left = o.left;
+      w.style.top = o.top;
+      w.style.width = o.width;
+      w.style.height = o.height;
+      delete w.dataset.max;
+      return;
+    }
+    w.dataset.orig = JSON.stringify({
+      left: w.style.left, top: w.style.top, width: w.style.width, height: w.style.height
+    });
+    var tw = $("#taskbar") ? $("#taskbar").offsetHeight : 30;
+    w.style.left = "0px";
+    w.style.top = "0px";
+    w.style.width = window.innerWidth + "px";
+    w.style.height = (window.innerHeight - tw) + "px";
+    w.dataset.max = "1";
+  }
   function restoreWindow(id) {
     var w = document.getElementById(id);
     if (!w) return;
@@ -167,8 +191,9 @@
     if (flag("chatRead")) n++;
     if (flag("diaryUnlocked")) n++;
     if (flag("blogSource")) n++;
+    if (flag("partA")) n++;
     if (flag("caesarSolved")) n++;
-    if (flag("forumPost")) n++;
+    if (flag("partB")) n++;
     return n;
   }
   function showHelp() {
@@ -176,6 +201,18 @@
     var h = DATA.hintLevels[n] || DATA.hintLevels[DATA.hintLevels.length - 1];
     $("#help-text").innerHTML = "<b>当前进度：" + n + "/6</b><br>" + h.text;
     $("#help-dialog").classList.remove("hidden");
+  }
+
+  function toast(msg) {
+    var d = el(
+      '<div class="dialog"><div class="dialog-box" style="width:360px;">' +
+        '<div class="dialog-title">系统提示</div>' +
+        '<div class="dialog-body">' + msg + "</div>" +
+        '<button class="xp-btn" id="toast-ok">知道了</button>' +
+      "</div></div>"
+    );
+    document.body.appendChild(d);
+    d.querySelector("#toast-ok").addEventListener("click", function () { d.remove(); });
   }
 
   /* ---------------- 密码校验 ---------------- */
@@ -196,7 +233,8 @@
     document.body.appendChild(d);
     var input = d.querySelector("#pw-input");
     function check() {
-      if (input.value.trim() === correct) {
+      var v = input.value.trim().toUpperCase().replace(/\s+/g, "");
+      if (v === correct.toUpperCase().replace(/\s+/g, "")) {
         d.remove();
         onOk();
       } else {
@@ -219,20 +257,104 @@
     if (extra) body.appendChild(extra);
   }
 
+  /* ---------------- 应用：资源管理器布局 ---------------- */
+  function expLayout(navHtml, mainHtml) {
+    return el('<div class="xp-exp"><div class="xp-side">' + navHtml + '</div><div class="xp-main">' + mainHtml + '</div></div>');
+  }
+  function showSysInfo() {
+    var d = el(
+      '<div class="dialog"><div class="dialog-box">' +
+        '<div class="dialog-title">系统属性</div>' +
+        '<div class="dialog-body" style="font-size:12px;">' +
+          "计算机：林远的电脑<br>处理器：Intel Pentium 4, 2.40GHz<br>内存：512MB<br>" +
+          "操作系统：Microsoft Windows XP Professional (2003)<br><br><span style='color:#999;'>主机名：LINYUAN-PC</span>" +
+        "</div>" +
+        '<button class="xp-btn" id="si-ok">确定</button>' +
+      "</div></div>"
+    );
+    document.body.appendChild(d);
+    d.querySelector("#si-ok").addEventListener("click", function () { d.remove(); });
+  }
+
   /* ---------------- 应用：我的电脑 ---------------- */
   function openMyComputer() {
-    var w = createWindow({ title: "我的电脑", width: 380 });
+    var w = createWindow({ title: "我的电脑", width: 500, height: 380 });
     var body = w.querySelector(".win-body");
-    body.innerHTML =
+    var layout = expLayout(
+      '<h4>系统任务</h4><div class="nav-item" data-nav="sysinfo">查看系统信息</div>' +
+      '<h4>其他位置</h4><div class="nav-item" data-nav="mydocs">我的文档</div><div class="nav-item" data-nav="recycle">回收站</div>' +
+      '<h4>详细信息</h4><div class="nav-item">本地磁盘 (C:)</div>',
       '<div class="file-list">' +
-        '<div class="file-item" data-f="readme"><span>&#128187;</span> C盘 (本地磁盘)</div>' +
+        '<div class="file-item" data-f="c"><span>&#128187;</span> 本地磁盘 (C:)</div>' +
+        '<div class="file-item" data-f="readme"><span>&#128193;</span> readme.txt</div>' +
+      "</div>"
+    );
+    body.appendChild(layout);
+    body.querySelector('[data-nav="sysinfo"]').addEventListener("click", showSysInfo);
+    body.querySelector('[data-nav="mydocs"]').addEventListener("click", openMyDocs);
+    body.querySelector('[data-nav="recycle"]').addEventListener("click", openRecycle);
+    body.querySelector('[data-f="c"]').addEventListener("click", openCDrive);
+    body.querySelector('[data-f="readme"]').addEventListener("click", function () {
+      openNotepad("readme.txt", DATA.files.readme.content);
+    });
+  }
+
+  function openCDrive() {
+    var w = createWindow({ title: "本地磁盘 (C:)", width: 500, height: 380 });
+    var body = w.querySelector(".win-body");
+    var layout = expLayout(
+      '<h4>系统任务</h4><div class="nav-item" data-nav="space">查看磁盘空间</div>' +
+      '<h4>其他位置</h4><div class="nav-item" data-nav="pc">我的电脑</div><div class="nav-item" data-nav="recycle">回收站</div>' +
+      '<h4>详细信息</h4><div class="nav-item">已用 12.4GB / 共 40GB</div>',
+      '<div class="file-list">' +
+        '<div class="file-item" data-f="morse"><span>&#128225;</span> 摩尔斯速查表.txt</div>' +
+        '<div class="file-item" data-f="secret"><span>&#128274;</span> 机密</div>' +
         '<div class="file-item" data-f="program"><span>&#128193;</span> Program Files</div>' +
-      "</div>";
+      "</div>"
+    );
+    body.appendChild(layout);
+    body.querySelector('[data-nav="space"]').addEventListener("click", function () {
+      toast("本地磁盘 (C:)<br>容量：40 GB<br>已用：12.4 GB<br>可用：27.6 GB");
+    });
+    body.querySelector('[data-nav="pc"]').addEventListener("click", openMyComputer);
+    body.querySelector('[data-nav="recycle"]').addEventListener("click", openRecycle);
+    body.querySelector('[data-f="morse"]').addEventListener("click", function () {
+      openNotepad("摩尔斯速查表.txt", DATA.files.morse.content);
+    });
+    body.querySelector('[data-f="secret"]').addEventListener("click", function () {
+      if (flag("secretUnlocked")) openSecretFolder();
+      else askPassword("机密", "THEFORUM", function () {
+        setFlag("secretUnlocked");
+        openSecretFolder();
+      }, "这是一个加密文件夹。<br>密码线索在博客的「原文件」注释里。<br>输入时不区分大小写、可带空格。");
+    });
     body.querySelector('[data-f="program"]').addEventListener("click", function () {
       alert("访问被拒绝。\n\n错误信息：你没有权限查看此文件夹。");
     });
-    body.querySelector('[data-f="readme"]').addEventListener("click", function () {
-      openNotepad("readme.txt", DATA.files.readme.content);
+  }
+
+  function openSecretFolder() {
+    var w = createWindow({ title: "机密", width: 500, height: 360 });
+    var body = w.querySelector(".win-body");
+    var layout = expLayout(
+      '<h4>文件夹任务</h4><div class="nav-item" data-nav="note">查看便签</div>' +
+      '<h4>其他位置</h4><div class="nav-item" data-nav="pc">我的电脑</div><div class="nav-item" data-nav="c">本地磁盘 (C:)</div>',
+      '<div class="file-list">' +
+        '<div class="file-item" data-f="a"><span>&#128274;</span> 密文A.txt</div>' +
+        '<div class="file-item" data-f="note"><span>&#128221;</span> 便签.txt</div>' +
+      "</div>"
+    );
+    body.appendChild(layout);
+    body.querySelector('[data-nav="note"]').addEventListener("click", function () {
+      openNotepad("便签.txt", "提醒自己：\n\n两段密文都解开后，用 ROT13 分别解码，再把文字拼起来读。\n（另一段在老周的论坛帖子里。）");
+    });
+    body.querySelector('[data-nav="pc"]').addEventListener("click", openMyComputer);
+    body.querySelector('[data-nav="c"]').addEventListener("click", openCDrive);
+    body.querySelector('[data-f="a"]').addEventListener("click", function () {
+      openNotepad("密文A.txt", DATA.files.secret_a.content);
+    });
+    body.querySelector('[data-f="note"]').addEventListener("click", function () {
+      openNotepad("便签.txt", "提醒自己：\n\n两段密文都解开后，用 ROT13 分别解码，再把文字拼起来读。\n（另一段在老周的论坛帖子里。）");
     });
   }
 
@@ -307,12 +429,21 @@
 
   /* ---------------- 应用：回收站 ---------------- */
   function openRecycle() {
-    var w = createWindow({ title: "回收站", width: 380 });
+    var w = createWindow({ title: "回收站", width: 500, height: 340 });
     var body = w.querySelector(".win-body");
-    body.innerHTML =
+    var layout = expLayout(
+      '<h4>回收站任务</h4><div class="nav-item" data-nav="empty">清空回收站</div>' +
+      '<h4>其他位置</h4><div class="nav-item" data-nav="pc">我的电脑</div><div class="nav-item" data-nav="c">本地磁盘 (C:)</div>',
       '<div class="file-list">' +
         '<div class="file-item" data-f="note"><span>&#128211;</span> 被删除的笔记.txt <span style="color:#999;font-size:11px;">（已恢复）</span></div>' +
-      "</div>";
+      "</div>"
+    );
+    body.appendChild(layout);
+    body.querySelector('[data-nav="empty"]').addEventListener("click", function () {
+      alert("回收站是空的？\n\n……不对，有个文件在。你最好把它恢复。");
+    });
+    body.querySelector('[data-nav="pc"]').addEventListener("click", openMyComputer);
+    body.querySelector('[data-nav="c"]').addEventListener("click", openCDrive);
     body.querySelector('[data-f="note"]').addEventListener("click", function () {
       openNotepad("被删除的笔记.txt", DATA.files.recycle_note.content);
     });
@@ -429,15 +560,12 @@
       var out = '<div class="decoder-tab' + (i === 0 ? " active" : "") + '" data-pane="' + i + '">' +
         '<textarea id="dc-in' + i + '" placeholder="把要解码的内容粘贴到这里…"></textarea>' +
         '<div style="margin:6px 0;">' +
-          (i === 3 ? '<label style="font-size:12px;margin-right:6px;">位移（密文往回收的位数，如 5）：</label><input class="xp-input" id="dc-shift" type="number" value="0" style="width:70px;margin-right:12px;">' : "") +
+          (i === 3 ? '<label style="font-size:12px;margin-right:6px;">位移（往回收的位数）：</label><input class="xp-input" id="dc-shift" type="number" value="0" style="width:70px;margin-right:12px;">' : "") +
           '<button class="xp-btn" data-decode="' + i + '" style="padding:3px 14px;">解码</button>' +
         "</div>" +
         '<div class="decoder-out" id="dc-out' + i + '">结果会显示在这里</div>';
-      if (i === 0) {
-        out += '<div class="morse-table">摩尔斯表：<br>0=----- 1=.---- 2=..--- 3=...-- 4=....- 5=.....<br>6=-.... 7=--... 8=---.. 9=----.<br>A=.- B=-... C=-.-. D=-.. E=. F=..-.<br>G=--. H=.... I=.. J=.--- K=-.- L=.-..<br>M=-- N=-. O=--- P=.--. Q=--.- R=.-.<br>S=... T=- U=..- V=...- W=.-- X=-..- Y=-.-- Z=--..</div>';
-      }
       if (i === 3) {
-        out += '<div class="morse-table">凯撒密码：把每个字母按字母表往后移若干位。博客里的暗语是"右移5格"得到的，解码时就往回收5格（位移填 5）。</div>';
+        out += '<div class="morse-table">凯撒密码：把每个字母在字母表上移动固定位数。位移可能是几？线索也许就在聊天记录里。</div>';
       }
       return out + "</div>";
     }
@@ -463,9 +591,19 @@
         else if (i === 2) res = rot13(input);
         else res = caesarDecode(input, document.getElementById("dc-shift").value);
         out.textContent = res || "（无法解码，检查输入）";
-        if (i === 2 && res.trim() === DATA.forum.truthPlain) startEnding();
+        if (i === 2) {
+          var t = res.trim();
+          if (t === DATA.truthA) {
+            setFlag("partA");
+            toast(flag("partB") ? "真相的两半都解开了！" : "这是真相的前半段。<br>另一半，在老周挂在论坛里的那个帖子上。");
+            if (flag("partB")) startEnding();
+          } else if (t === DATA.truthB) {
+            setFlag("partB");
+            toast(flag("partA") ? "真相的两半都解开了！" : "这是真相的后半段。<br>前半段，在老宅那台电脑的C盘「机密」文件夹里。");
+            if (flag("partA")) startEnding();
+          }
+        }
         if (i === 3 && res.trim() === "LOG INTO THE FORUM") setFlag("caesarSolved");
-        if (i === 1 && res.indexOf("看博客") !== -1) setFlag("diaryBase64");
       });
     });
   }
@@ -493,7 +631,7 @@
   function openClueLog() {
     var w = createWindow({ title: "线索本", width: 440, height: 420 });
     var body = w.querySelector(".win-body");
-    var html = '<div style="font-size:12px;color:#666;margin-bottom:8px;">调查进度：' + hintLevel() + "/5</div>";
+    var html = '<div style="font-size:12px;color:#666;margin-bottom:8px;">调查进度：' + hintLevel() + "/6</div>";
     html += '<div class="file-list">';
     DATA.clueLog.forEach(function (c, i) {
       var done = i === 0 || flag(c.flag);
@@ -564,6 +702,14 @@
         location.reload();
       }
     });
+    $("#sm-logoff").addEventListener("click", function () {
+      $("#startmenu").classList.add("hidden");
+      showLogin();
+    });
+    $("#sm-shutdown").addEventListener("click", function () {
+      $("#startmenu").classList.add("hidden");
+      $("#sm-restart").click();
+    });
     $("#help-close").addEventListener("click", function () {
       $("#help-dialog").classList.add("hidden");
     });
@@ -620,6 +766,8 @@
   function showLogin() {
     $("#boot").classList.add("hidden");
     $("#login").classList.remove("hidden");
+    $("#desktop").classList.add("hidden");
+    $("#taskbar").classList.add("hidden");
   }
   function showDesktop() {
     $("#login").classList.add("hidden");

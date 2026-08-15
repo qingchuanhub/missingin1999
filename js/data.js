@@ -35,6 +35,8 @@ window.GAME_DATA = {
 <!--
   凯撒暗语：QTL NSYT YMJ KTWZR
   提示：位移值，老周在聊天记录里提过。用解码器的「凯撒」解开它。
+  机密文件夹的密码：GUR SBEHZ
+  （GUR SBEHZ 是一串 ROT13。解开后去空格、转大写。）
   MTk5OeW5tDfmnIg35pel77yM6ICB5a6F44CC6ICB5ZGo5rKh5pyJ6K+06LCO77yM5LuW55yL5Yiw55qE77yM5piv5Y+m5LiA5Liq5Lq644CC （这是一段彩蛋，解码后是另一个秘密。）
 -->
 </body>
@@ -87,11 +89,55 @@ window.GAME_DATA = {
 
 如果你迷路了，试试：
 1. 博客的"原文件"
-2. 回收站
-3. 相册
-4. 论坛
+2. 我的电脑 → C盘
+3. 回收站
+4. 相册
+5. 论坛
 
+真相被拆成了两半，藏在这台电脑里。
 别相信任何自称"林远"的人。`
+    },
+
+    "morse": {
+      name: "摩尔斯速查表.txt",
+      icon: "📡",
+      content: `
+摩尔斯电码速查表（老周年轻时当电报员用的那份，1999年油印）
+
+数字：
+0 = -----
+1 = .----
+2 = ..---
+3 = ...--
+4 = ....-
+5 = .....
+6 = -....
+7 = --...
+8 = ---..
+9 = ----.
+
+字母：
+A=.-   B=-...   C=-.-.   D=-..   E=.    F=..-.
+G=--.   H=....   I=..    J=.---   K=-.-   L=.-..
+M=--   N=-.     O=---   P=.--.   Q=--.-  R=.-.
+S=...   T=-     U=..-   V=...-   W=.--   X=-..-
+Y=-.--  Z=--..
+
+（摘自老周随身携带的旧册子。）`
+    },
+
+    "secret_a": {
+      name: "密文A.txt",
+      icon: "🔐",
+      content: `
+【机密 · 真相的第一部分】
+
+以下是真相的一半。用解码器的 ROT13 解开。
+
+GUR ERNY YVALHNA ARIRE INAVFURQ. VA 1999 NA VZCBFGRE GBBX UVF CYNPR. VA 2008 GUR VZCBFGRE ENA NJNL NTNVA.
+
+另一半，在老周挂在论坛里的那个帖子上。
+两半拼在一起，才是全部真相。`
     },
   },
 
@@ -140,10 +186,13 @@ window.GAME_DATA = {
 <p>可那时候，他应该在省城念书——火车票在相册里，日期1999年6月28日。</p>
 <p>……但我就是见过他。</p>
 <p>如果那个叫"林远"的人看到这条，记得，你生日那天，我给你的东西。</p>
-<p style="font-family:Consolas,monospace;">GUR ERNY YVALHNA ARIRE INAVFURQ. VA 1999 NA VZCBFGRE GBBX UVF CYNPR. VA 2008 GUR VZCBFGRE ENA NJNL NTNVA. VS LBH NER ERNQVAT GUVF, V NZ YVALHNA. YNBMUBH VF ZL NYVNF. GUR PBZCHGRE VF SEBZ ZR. PBZR SVAQ ZR.</p>
+<p style="font-family:Consolas,monospace;">VS LBH NER ERNQVAT GUVF, V NZ YVALHNA. YNBMUBH VF ZL NYVNF. GUR PBZCHGRE VF SEBZ ZR. PBZR SVAQ ZR.</p>
+<p style="color:#999;font-size:12px;">（这是真相的后半段。前半段在老宅那台电脑的C盘「机密」文件夹里。两半都用 ROT13 解开，拼在一起才是全部。）</p>
 <p style="color:#999;font-size:12px;">（本版规则：禁止发广告，禁止讨论2046年之后的事。）</p>`,
-    truthPlain: "THE REAL LINYUAN NEVER VANISHED. IN 1999 AN IMPOSTER TOOK HIS PLACE. IN 2008 THE IMPOSTER RAN AWAY AGAIN. IF YOU ARE READING THIS, I AM LINYUAN. LAOZHOU IS MY ALIAS. THE COMPUTER IS FROM ME. COME FIND ME.",
   },
+
+  truthA: "THE REAL LINYUAN NEVER VANISHED. IN 1999 AN IMPOSTER TOOK HIS PLACE. IN 2008 THE IMPOSTER RAN AWAY AGAIN.",
+  truthB: "IF YOU ARE READING THIS, I AM LINYUAN. LAOZHOU IS MY ALIAS. THE COMPUTER IS FROM ME. COME FIND ME.",
 
   endingText: `屏幕安静了几秒。
 
@@ -152,7 +201,7 @@ window.GAME_DATA = {
 ——————————————————
 阿远：
 
-如果你能看到这封邮件，说明你已经找到了所有的路标。
+如果你能看到这封邮件，说明你已经把所有散落的碎片拼在了一起。
 
 真正的林远从未失踪。
 1999年，有个人顶替他，活了九年。
@@ -191,26 +240,29 @@ window.GAME_DATA = {
 
 【调查技巧】
 • 桌面图标就是线索，双击打开
-• 线索可能藏在：文件内容、聊天记录、图片属性、回收站
+• 线索可能藏在：文件内容、聊天记录、图片属性、回收站、C盘文件夹
 • 有些"乱码"文字，可以用桌面上的【解码器】解开
+• 真相被拆成了两半，散落在这台电脑里
 • 卡住了？打开【线索本】看进度，或点开始菜单的【帮助】`,
 
   clueLog: [
-    { flag: "start", text: "双击桌面图标开始调查。建议先从【聊天记录】入手。" },
-    { flag: "chatRead", text: "【聊天记录】里，老周发了一串摩尔斯电码，还提过他传暗语的习惯。下一步：用【解码器】把电码解成数字。" },
-    { flag: "diaryUnlocked", text: "【加密日记】已解锁。日记末尾有一串 base64 乱码，用【解码器】解开，它会告诉你去哪。" },
-    { flag: "blogSource", text: "日记指向博客的【原文件】。打开博客.html，点「查看原文件」，看 <!-- --> 里的注释。里面有凯撒暗语。" },
-    { flag: "caesarSolved", text: "凯撒暗语指向【时光论坛】。打开浏览器的收藏夹，找到老周的帖子。帖子末尾是一串 ROT13。" },
-    { flag: "forumPost", text: "已找到老周的帖子。下一步：用【解码器】的 ROT13 解开帖子末尾的乱码——那就是真相。" },
+    { flag: "start", text: "双击桌面图标开始调查。建议顺序：聊天记录 → 我的电脑(C盘) → 我的文档。桌面上的【解码器】能解开各种乱码。" },
+    { flag: "chatRead", text: "【聊天记录】里，老周发了一串点划符号——摩尔斯电码。速查表在【我的电脑】→ C盘里。用【解码器】把电码解成数字。" },
+    { flag: "diaryUnlocked", text: "【加密日记】已解锁。日记末尾的 base64 乱码，用【解码器】解开，它会告诉你去哪。" },
+    { flag: "blogSource", text: "日记指向博客的【原文件】。注释里有两处暗语：一处 ROT13 是 C盘「机密」文件夹的密码，一处凯撒指向论坛。" },
+    { flag: "partA", text: "已拿到真相的前半段。下一步：凯撒解出的 LOG INTO THE FORUM 指向【时光论坛】的帖子。" },
+    { flag: "caesarSolved", text: "凯撒暗语指向【时光论坛】。打开浏览器 → 收藏夹 → 时光论坛，找到老周的帖子。" },
+    { flag: "partB", text: "真相的两半都解开了。用【解码器】的 ROT13 分别解出两段密文，拼在一起就是全部真相。" },
     { flag: "endingShown", text: "真相已揭开。彩蛋：回头再看一次博客的【原文件】注释。" },
   ],
 
   hintLevels: [
-    { min: 0, text: "这台电脑是失踪多年的哥哥林远寄来的。双击桌面图标开始调查。建议顺序：聊天记录 → 我的文档 → 回收站。桌面上的【线索本】会记录你的进度。" },
-    { min: 1, text: "聊天记录里老周发了一串点划符号——那是摩尔斯电码。打开【解码器】的摩尔斯页，把电码粘贴进去解码，得到一个4位数字密码。博客里说过老周爱发电报码。" },
+    { min: 0, text: "这台电脑是失踪多年的哥哥林远寄来的。双击桌面图标开始调查。建议顺序：聊天记录 → 我的电脑(C盘) → 我的文档。桌面上的【线索本】会记录你的进度。" },
+    { min: 1, text: "聊天记录里老周发了一串点划符号——那是摩尔斯电码。速查表在【我的电脑】→ C盘里。打开【解码器】的摩尔斯页，把电码粘贴进去解码，得到一个4位数字密码。" },
     { min: 2, text: "用4位数字打开【我的文档】里的加密日记。日记末尾的 base64 乱码，用【解码器】解出，它会指引你下一步去哪。" },
-    { min: 3, text: "日记指引你去看博客的【原文件】（=用记事本打开网页文件看到的内容，注释在 <!-- --> 里）。打开博客.html，点「查看原文件」，里面有凯撒暗语「QTL NSYT YMJ KTWZR」。位移值在聊天记录里——老周说过他传暗语的习惯。" },
-    { min: 4, text: "凯撒暗语解出后指向【时光论坛】。打开浏览器 → 收藏夹 → 时光论坛，找到老周发的帖子。帖子末尾那串英文乱码用【解码器】的 ROT13 解开。" },
-    { min: 5, text: "已经找到老周的帖子。用【解码器】的 ROT13 解开帖子末尾的英文乱码，那就是真相。" },
+    { min: 3, text: "日记指引你去看博客的【原文件】（=用记事本打开网页文件看到的内容，注释在 <!-- --> 里）。注释里有两处暗语：一处 ROT13 是【我的电脑】→ C盘「机密」文件夹的密码；一处凯撒（位移值老周在聊天里提过）指向论坛。" },
+    { min: 4, text: "用密码打开 C盘 的「机密」文件夹，里面有真相的一半（ROT13）。另一半在论坛帖子里。" },
+    { min: 5, text: "凯撒解出的 LOG INTO THE FORUM 指向【时光论坛】。打开浏览器 → 收藏夹 → 时光论坛，找到老周的帖子，末尾是真相的另一半（ROT13）。" },
+    { min: 6, text: "两段密文都用【解码器】的 ROT13 解开。分别解出后，拼在一起就是全部真相。" },
   ],
 };

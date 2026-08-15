@@ -12,6 +12,7 @@
 <div id="boot" class="screen">
   <div id="bios"></div>
   <div id="xpbar"><div id="xpbar-fill"></div></div>
+  <div id="xp-logo">Microsoft® Windows XP Professional</div>
   <div id="boot-tip">点击任意处跳过</div>
 </div>
 
@@ -43,7 +44,7 @@
 
 <!-- 任务栏 -->
 <div id="taskbar" class="hidden">
-  <button id="btn-start" class="xp-btn">开始</button>
+  <button id="btn-start" class="xp-btn"><span id="start-flag">🏁</span> 开始</button>
   <div id="task-windows"></div>
   <div id="clock"></div>
 </div>
@@ -51,13 +52,31 @@
 <!-- 开始菜单 -->
 <div id="startmenu" class="hidden">
   <div id="startmenu-panel">
-    <div class="sm-item" data-open="mydocs">🗂️ 我的文档</div>
-    <div class="sm-item" data-open="chat">💬 聊天记录</div>
-    <div class="sm-item" data-open="browser">🌐 浏览器</div>
-    <div class="sm-item" data-open="decoder">🧮 解码器</div>
-    <div class="sm-item" data-open="cluelog">📓 线索本</div>
-    <div class="sm-item" id="sm-help">❓ 帮助</div>
-    <div class="sm-item" id="sm-restart">🔁 重新启动</div>
+    <div id="sm-user">
+      <div class="sm-avatar">🧑</div>
+      <div class="sm-uname">访客</div>
+    </div>
+    <div id="sm-pane">
+      <div id="sm-left">
+        <div class="sm-sep">Internet</div>
+        <div class="sm-item" data-open="browser">🌐 浏览器</div>
+        <div class="sm-sep">电子邮件</div>
+        <div class="sm-item" data-open="chat">💬 聊天记录</div>
+        <div class="sm-sep sm-programs">所有程序</div>
+        <div class="sm-item" data-open="decoder">🧮 解码器</div>
+        <div class="sm-item" data-open="cluelog">📓 线索本</div>
+      </div>
+      <div id="sm-right">
+        <div class="sm-item" data-open="mydocs">🗂️ 我的文档</div>
+        <div class="sm-item" data-open="mycomputer">🖥️ 我的电脑</div>
+        <div class="sm-item" id="sm-help">❓ 帮助</div>
+        <div class="sm-item" id="sm-restart">🔁 重新启动</div>
+      </div>
+    </div>
+    <div id="sm-footer">
+      <span id="sm-logoff">注销</span>
+      <span id="sm-shutdown">关闭计算机</span>
+    </div>
   </div>
 </div>
 
