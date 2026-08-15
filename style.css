@@ -73,6 +73,9 @@ html, body { width: 100%; height: 100%; overflow: hidden; font-family: "Microsof
 .file-list { display: flex; flex-direction: column; gap: 2px; }
 .file-item { padding: 6px 8px; cursor: pointer; border-radius: 3px; display: flex; gap: 8px; align-items: center; }
 .file-item:hover { background: #316ac5; color: #fff; }
+.clue-done { color: #777; }
+.clue-done span:first-child { color: #2a7d2a; }
+.clue-next { font-weight: bold; }
 
 /* ---------- 聊天记录 ---------- */
 .chat-wrap { background: #f6f6f6; }

@@ -35,6 +35,13 @@
       return String.fromCharCode((c.charCodeAt(0) - base + 13) % 26 + base);
     });
   }
+  function caesarDecode(s, shift) {
+    var n = (parseInt(shift, 10) || 0) % 26;
+    return s.replace(/[A-Za-z]/g, function (c) {
+      var base = c <= "Z" ? 65 : 97;
+      return String.fromCharCode((c.charCodeAt(0) - base - n + 26) % 26 + base);
+    });
+  }
   function b64decode(s) {
     try {
       var bin = atob(s.trim());
@@ -160,8 +167,7 @@
     if (flag("chatRead")) n++;
     if (flag("diaryUnlocked")) n++;
     if (flag("blogSource")) n++;
-    if (flag("albumUnlocked")) n++;
-    if (flag("photo3Props")) n++;
+    if (flag("caesarSolved")) n++;
     if (flag("forumPost")) n++;
     return n;
   }
@@ -244,33 +250,28 @@
     body.querySelector('[data-f="blog"]').addEventListener("click", function () { openBlog(); });
     body.querySelector('[data-f="diary"]').addEventListener("click", function () { openDiary(); });
     body.querySelector('[data-f="album"]').addEventListener("click", function () {
-      if (!flag("albumUnlocked")) {
-        askPassword("相册", DATA.album.password, function () {
-          setFlag("albumUnlocked");
-          openAlbum();
-        }, "相册被锁定。<br>密码是4位数字。<br>也许博客的源代码知道点什么……");
-      } else {
-        openAlbum();
-      }
+      openAlbum();
     });
   }
 
   function openBlog() {
-    var w = createWindow({ title: "博客.html - 记事本", width: 560, height: 420 });
+    var w = createWindow({ title: "博客.html - 记事本", width: 560, height: 440 });
     var body = w.querySelector(".win-body");
     var srcVisible = false;
     var holder = el("<div></div>");
     holder.innerHTML = DATA.files.blog.content;
-    var btn = el('<button class="xp-btn" style="margin-bottom:8px;">查看源代码</button>');
-    var srcBox = el('<pre style="display:none;white-space:pre-wrap;font-family:Consolas,monospace;font-size:11px;line-height:1.6;background:#f4f4f4;padding:8px;border:1px solid #ccc;max-height:300px;overflow:auto;"></pre>');
+    var btn = el('<button class="xp-btn" style="margin-bottom:4px;">查看原文件</button>');
+    var tip = el('<div style="color:#777;font-size:11px;margin-bottom:8px;">「原文件」= 用记事本打开这个网页能看到的内容。注释藏在 &lt;!-- --&gt; 之间。</div>');
+    var srcBox = el('<pre style="display:none;white-space:pre-wrap;font-family:Consolas,monospace;font-size:11px;line-height:1.6;background:#f4f4f4;padding:8px;border:1px solid #ccc;max-height:280px;overflow:auto;"></pre>');
     srcBox.textContent = DATA.files.blog.source;
     btn.addEventListener("click", function () {
       srcVisible = !srcVisible;
       srcBox.style.display = srcVisible ? "block" : "none";
-      btn.textContent = srcVisible ? "收起源代码" : "查看源代码";
+      btn.textContent = srcVisible ? "收起原文件" : "查看原文件";
       if (srcVisible) setFlag("blogSource");
     });
     body.appendChild(btn);
+    body.appendChild(tip);
     body.appendChild(srcBox);
     body.appendChild(holder);
   }
@@ -415,9 +416,9 @@
 
   /* ---------------- 应用：解码器 ---------------- */
   function openDecoder() {
-    var w = createWindow({ title: "解码器", width: 480, height: 480 });
+    var w = createWindow({ title: "解码器", width: 500, height: 520 });
     var body = w.querySelector(".win-body");
-    var tabs = ["摩尔斯", "Base64", "ROT13"];
+    var tabs = ["摩尔斯", "Base64", "ROT13", "凯撒"];
     var html = '<div class="decoder-tabs">';
     tabs.forEach(function (t, i) {
       html += '<div class="tab' + (i === 0 ? " active" : "") + '" data-tab="' + i + '">' + t + "</div>";
@@ -427,14 +428,20 @@
     function tabHtml(i) {
       var out = '<div class="decoder-tab' + (i === 0 ? " active" : "") + '" data-pane="' + i + '">' +
         '<textarea id="dc-in' + i + '" placeholder="把要解码的内容粘贴到这里…"></textarea>' +
-        '<div style="margin:6px 0;"><button class="xp-btn" data-decode="' + i + '" style="padding:3px 14px;">解码</button></div>' +
+        '<div style="margin:6px 0;">' +
+          (i === 3 ? '<label style="font-size:12px;margin-right:6px;">位移（密文往回收的位数，如 5）：</label><input class="xp-input" id="dc-shift" type="number" value="0" style="width:70px;margin-right:12px;">' : "") +
+          '<button class="xp-btn" data-decode="' + i + '" style="padding:3px 14px;">解码</button>' +
+        "</div>" +
         '<div class="decoder-out" id="dc-out' + i + '">结果会显示在这里</div>';
       if (i === 0) {
         out += '<div class="morse-table">摩尔斯表：<br>0=----- 1=.---- 2=..--- 3=...-- 4=....- 5=.....<br>6=-.... 7=--... 8=---.. 9=----.<br>A=.- B=-... C=-.-. D=-.. E=. F=..-.<br>G=--. H=.... I=.. J=.--- K=-.- L=.-..<br>M=-- N=-. O=--- P=.--. Q=--.- R=.-.<br>S=... T=- U=..- V=...- W=.-- X=-..- Y=-.-- Z=--..</div>';
       }
+      if (i === 3) {
+        out += '<div class="morse-table">凯撒密码：把每个字母按字母表往后移若干位。博客里的暗语是"右移5格"得到的，解码时就往回收5格（位移填 5）。</div>';
+      }
       return out + "</div>";
     }
-    html += tabHtml(0) + tabHtml(1) + tabHtml(2);
+    html += tabHtml(0) + tabHtml(1) + tabHtml(2) + tabHtml(3);
     body.innerHTML = html;
 
     body.querySelectorAll(".tab").forEach(function (t) {
@@ -453,9 +460,11 @@
         var res = "";
         if (i === 0) res = morseDecode(input);
         else if (i === 1) res = b64decode(input);
-        else res = rot13(input);
+        else if (i === 2) res = rot13(input);
+        else res = caesarDecode(input, document.getElementById("dc-shift").value);
         out.textContent = res || "（无法解码，检查输入）";
         if (i === 2 && res.trim() === DATA.forum.truthPlain) startEnding();
+        if (i === 3 && res.trim() === "LOG INTO THE FORUM") setFlag("caesarSolved");
         if (i === 1 && res.indexOf("看博客") !== -1) setFlag("diaryBase64");
       });
     });
@@ -480,6 +489,34 @@
     }, 40);
   }
 
+  /* ---------------- 应用：线索本 / 案件简报 ---------------- */
+  function openClueLog() {
+    var w = createWindow({ title: "线索本", width: 440, height: 420 });
+    var body = w.querySelector(".win-body");
+    var html = '<div style="font-size:12px;color:#666;margin-bottom:8px;">调查进度：' + hintLevel() + "/5</div>";
+    html += '<div class="file-list">';
+    DATA.clueLog.forEach(function (c, i) {
+      var done = i === 0 || flag(c.flag);
+      var icon = done ? "✔️" : "➜";
+      var cls = done ? "clue-done" : "clue-next";
+      html += '<div class="file-item ' + cls + '" style="align-items:flex-start;"><span>' + icon + "</span><span>" + c.text + "</span></div>";
+    });
+    html += "</div>";
+    body.innerHTML = html;
+  }
+
+  function openIntro() {
+    var d = el(
+      '<div class="dialog"><div class="dialog-box" style="width:440px;">' +
+        '<div class="dialog-title">案件简报</div>' +
+        '<div class="dialog-body" style="white-space:pre-wrap;">' + DATA.introText + "</div>" +
+        '<button class="xp-btn" id="intro-ok" style="margin-right:12px;">开始调查</button>' +
+      "</div></div>"
+    );
+    document.body.appendChild(d);
+    d.querySelector("#intro-ok").addEventListener("click", function () { d.remove(); });
+  }
+
   /* ---------------- 桌面 ---------------- */
   function initDesktop() {
     document.querySelectorAll(".desk-icon").forEach(function (ic) {
@@ -500,6 +537,8 @@
       case "recycle": openRecycle(); break;
       case "browser": openBrowser("home"); break;
       case "decoder": openDecoder(); break;
+      case "cluelog": openClueLog(); break;
+      case "intro": openIntro(); break;
     }
   }
 
@@ -588,6 +627,10 @@
     $("#taskbar").classList.remove("hidden");
     initDesktop();
     initTaskbar();
+    if (!flag("introShown")) {
+      setFlag("introShown");
+      openIntro();
+    }
   }
 
   /* ---------------- 启动 ---------------- */
