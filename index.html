@@ -8,6 +8,114 @@
 </head>
 <body>
 
+<!-- SVG 图标库（XP 风格，32×32） -->
+<svg width="0" height="0" style="position:absolute;">
+  <defs>
+    <linearGradient id="g-pc-frame" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#8a8a8a"/><stop offset=".5" stop-color="#5c5c5c"/><stop offset="1" stop-color="#3f3f3f"/>
+    </linearGradient>
+    <linearGradient id="g-pc-screen" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#8fe08f"/><stop offset="1" stop-color="#2f9a2f"/>
+    </linearGradient>
+    <linearGradient id="g-fld" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffe9a8"/><stop offset=".45" stop-color="#f5c84e"/><stop offset="1" stop-color="#d9a32c"/>
+    </linearGradient>
+    <linearGradient id="g-bin" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#e8f0f8"/><stop offset=".5" stop-color="#b8cfe0"/><stop offset="1" stop-color="#8fb0c8"/>
+    </linearGradient>
+    <radialGradient id="g-globe" cx=".35" cy=".3" r=".9">
+      <stop offset="0" stop-color="#cdeeff"/><stop offset=".55" stop-color="#4aa8e8"/><stop offset="1" stop-color="#14579e"/>
+    </radialGradient>
+    <linearGradient id="g-calc" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#a8c8e8"/><stop offset=".5" stop-color="#7aa4d0"/><stop offset="1" stop-color="#5a84b4"/>
+    </linearGradient>
+    <linearGradient id="g-nb" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#5a8fe0"/><stop offset=".5" stop-color="#3a6cc8"/><stop offset="1" stop-color="#2a4fa0"/>
+    </linearGradient>
+  </defs>
+
+  <symbol id="ico-pc" viewBox="0 0 32 32">
+    <rect x="3" y="3" width="26" height="18" rx="2" fill="url(#g-pc-frame)" stroke="#222"/>
+    <rect x="6" y="6" width="20" height="12" fill="url(#g-pc-screen)" stroke="#144d14"/>
+    <rect x="6" y="6" width="7" height="12" fill="#fff" opacity=".25"/>
+    <rect x="12" y="21" width="8" height="3" fill="#555"/>
+    <rect x="5" y="24" width="22" height="4" rx="1.5" fill="#666" stroke="#333"/>
+    <circle cx="22" cy="25" r="1.2" fill="#7cc47c"/>
+  </symbol>
+
+  <symbol id="ico-folder" viewBox="0 0 32 32">
+    <path d="M4,7.5 h7.5 l3,3.2 h12.2 a1.8,1.8 0 0 1 1.8,1.8 v12 a1.8,1.8 0 0 1 -1.8,1.8 h-22.4 a1.8,1.8 0 0 1 -1.8,-1.8 v-16 a1.8,1.8 0 0 1 1.8,-1.8 z" fill="url(#g-fld)" stroke="#a8781c" stroke-width="1.2"/>
+    <rect x="5" y="10" width="18" height="2.5" rx="1" fill="#fff" opacity=".5"/>
+  </symbol>
+
+  <symbol id="ico-chat" viewBox="0 0 32 32">
+    <path d="M9.5,23.5 L9.5,28.5 L14.5,23.5 Z" fill="#fff" stroke="#5f9e4f" stroke-width="2" stroke-linejoin="round"/>
+    <rect x="3" y="5" width="26" height="19" rx="5" fill="#fff" stroke="#5f9e4f" stroke-width="2"/>
+    <circle cx="11" cy="14.5" r="2" fill="#5f9e4f"/>
+    <circle cx="16" cy="14.5" r="2" fill="#5f9e4f"/>
+    <circle cx="21" cy="14.5" r="2" fill="#5f9e4f"/>
+  </symbol>
+
+  <symbol id="ico-bin" viewBox="0 0 32 32">
+    <path d="M9,7.5 h14 v3.2 h-14 z" fill="#dfe8f0" stroke="#6a7d8d" stroke-width="1.2"/>
+    <path d="M6.5,10.7 h19 l-2.4,15 a2,2 0 0 1 -2,1.8 h-10.2 a2,2 0 0 1 -2,-1.8 z" fill="url(#g-bin)" stroke="#5a6d7d" stroke-width="1.2"/>
+    <g fill="#2f8f3f" stroke="#1d6d2b" stroke-width=".8">
+      <path d="M16,13.5 l3.2,3.2 -1.6,1.6 -1,-1 v4.2 h-1.2 v-4.2 l-1,1 -1.6,-1.6 z"/>
+      <path d="M16,13.5 l3.2,3.2 -1.6,1.6 -1,-1 v4.2 h-1.2 v-4.2 l-1,1 -1.6,-1.6 z" transform="rotate(120 16 16.6)"/>
+      <path d="M16,13.5 l3.2,3.2 -1.6,1.6 -1,-1 v4.2 h-1.2 v-4.2 l-1,1 -1.6,-1.6 z" transform="rotate(240 16 16.6)"/>
+    </g>
+  </symbol>
+
+  <symbol id="ico-globe" viewBox="0 0 32 32">
+    <circle cx="16" cy="16.5" r="11" fill="url(#g-globe)" stroke="#0d3d70"/>
+    <ellipse cx="16" cy="16.5" rx="11" ry="3.6" fill="none" stroke="#e8e8f0" stroke-width=".9" opacity=".8"/>
+    <ellipse cx="16" cy="16.5" rx="3.6" ry="11" fill="none" stroke="#e8e8f0" stroke-width=".9" opacity=".8"/>
+    <ellipse cx="16" cy="16.5" rx="13.2" ry="5" fill="none" stroke="#ffb900" stroke-width="2.4"/>
+    <ellipse cx="16" cy="16.5" rx="13.2" ry="5" fill="none" stroke="#fff" stroke-width=".8" opacity=".6"/>
+  </symbol>
+
+  <symbol id="ico-calc" viewBox="0 0 32 32">
+    <rect x="6" y="3.5" width="20" height="25" rx="2.5" fill="url(#g-calc)" stroke="#2c4a70" stroke-width="1.2"/>
+    <rect x="9" y="7" width="14" height="5.5" rx="1" fill="#d8f0d8" stroke="#2c4a70"/>
+    <rect x="10.2" y="7.6" width="11.5" height="4" fill="#fff" opacity=".35"/>
+    <g fill="#e8e8e8" stroke="#5a5a5a" stroke-width=".8">
+      <rect x="9" y="15.5" width="3.8" height="3.2" rx=".6"/>
+      <rect x="14.1" y="15.5" width="3.8" height="3.2" rx=".6"/>
+      <rect x="19.2" y="15.5" width="3.8" height="3.2" rx=".6"/>
+      <rect x="9" y="19.9" width="3.8" height="3.2" rx=".6"/>
+      <rect x="14.1" y="19.9" width="3.8" height="3.2" rx=".6"/>
+      <rect x="19.2" y="19.9" width="3.8" height="3.2" rx=".6"/>
+      <rect x="9" y="24.3" width="3.8" height="3.2" rx=".6"/>
+      <rect x="14.1" y="24.3" width="3.8" height="3.2" rx=".6"/>
+      <rect x="19.2" y="24.3" width="3.8" height="3.2" rx=".6"/>
+    </g>
+  </symbol>
+
+  <symbol id="ico-nb" viewBox="0 0 32 32">
+    <rect x="5" y="3.5" width="22" height="25" rx="2" fill="url(#g-nb)" stroke="#162e6a" stroke-width="1.2"/>
+    <circle cx="8" cy="8.5" r="1.4" fill="#c8c8c8" stroke="#888"/>
+    <circle cx="8" cy="14" r="1.4" fill="#c8c8c8" stroke="#888"/>
+    <circle cx="8" cy="19.5" r="1.4" fill="#c8c8c8" stroke="#888"/>
+    <rect x="11" y="8" width="13" height="2.2" rx="1" fill="#fff" opacity=".85"/>
+    <rect x="11" y="12" width="13" height="2.2" rx="1" fill="#fff" opacity=".85"/>
+    <rect x="11" y="16" width="13" height="2.2" rx="1" fill="#fff" opacity=".85"/>
+    <rect x="11" y="20" width="8" height="2.2" rx="1" fill="#fff" opacity=".85"/>
+  </symbol>
+
+  <symbol id="flag-win" viewBox="0 0 32 32">
+    <clipPath id="cp-wave"><path d="M3,3.5 H29 V22 C25,24.5 20,26 16,25.8 C11,25.6 6,24.2 3,22 Z"/></clipPath>
+    <g transform="rotate(-4 16 16)">
+      <g clip-path="url(#cp-wave)">
+        <rect x="3" y="3.5" width="13" height="12" fill="#f65314"/>
+        <rect x="16" y="3.5" width="13" height="12" fill="#7cbb00"/>
+        <rect x="3" y="15.5" width="13" height="12" fill="#00a1f1"/>
+        <rect x="16" y="15.5" width="13" height="12" fill="#ffbb00"/>
+      </g>
+      <path d="M3,3.5 H29 V22 C25,24.5 20,26 16,25.8 C11,25.6 6,24.2 3,22 Z" fill="none" stroke="#fff" stroke-width="1.6"/>
+    </g>
+  </symbol>
+</svg>
+
 <!-- 开机画面 -->
 <div id="boot" class="screen">
   <div id="bios"></div>
@@ -31,20 +139,20 @@
 <!-- 桌面 -->
 <div id="desktop" class="screen hidden">
   <div id="desktop-icons">
-    <div class="desk-icon" data-app="mycomputer"><span class="ico">🖥️</span><span>我的电脑</span></div>
-    <div class="desk-icon" data-app="mydocs"><span class="ico">🗂️</span><span>我的文档</span></div>
-    <div class="desk-icon" data-app="chat"><span class="ico">💬</span><span>聊天记录</span></div>
-    <div class="desk-icon" data-app="recycle"><span class="ico">🗑️</span><span>回收站</span></div>
-    <div class="desk-icon" data-app="browser"><span class="ico">🌐</span><span>浏览器</span></div>
-    <div class="desk-icon" data-app="decoder"><span class="ico">🧮</span><span>解码器</span></div>
-    <div class="desk-icon" data-app="cluelog"><span class="ico">📓</span><span>线索本</span></div>
+    <div class="desk-icon" data-app="mycomputer"><span class="ico"><svg class="ico-svg"><use href="#ico-pc"/></svg></span><span>我的电脑</span></div>
+    <div class="desk-icon" data-app="mydocs"><span class="ico"><svg class="ico-svg"><use href="#ico-folder"/></svg></span><span>我的文档</span></div>
+    <div class="desk-icon" data-app="chat"><span class="ico"><svg class="ico-svg"><use href="#ico-chat"/></svg></span><span>聊天记录</span></div>
+    <div class="desk-icon" data-app="recycle"><span class="ico"><svg class="ico-svg"><use href="#ico-bin"/></svg></span><span>回收站</span></div>
+    <div class="desk-icon" data-app="browser"><span class="ico"><svg class="ico-svg"><use href="#ico-globe"/></svg></span><span>浏览器</span></div>
+    <div class="desk-icon" data-app="decoder"><span class="ico"><svg class="ico-svg"><use href="#ico-calc"/></svg></span><span>解码器</span></div>
+    <div class="desk-icon" data-app="cluelog"><span class="ico"><svg class="ico-svg"><use href="#ico-nb"/></svg></span><span>线索本</span></div>
   </div>
   <div id="windows"></div>
 </div>
 
 <!-- 任务栏 -->
 <div id="taskbar" class="hidden">
-  <button id="btn-start" class="xp-btn"><span id="start-flag">🏁</span> 开始</button>
+  <button id="btn-start" class="xp-btn"><span id="start-flag"><svg class="flag-svg"><use href="#flag-win"/></svg></span> 开始</button>
   <div id="task-windows"></div>
   <div id="clock"></div>
 </div>
@@ -59,16 +167,16 @@
     <div id="sm-pane">
       <div id="sm-left">
         <div class="sm-sep">Internet</div>
-        <div class="sm-item" data-open="browser">🌐 浏览器</div>
+        <div class="sm-item" data-open="browser"><svg class="sm-ico"><use href="#ico-globe"/></svg> 浏览器</div>
         <div class="sm-sep">电子邮件</div>
-        <div class="sm-item" data-open="chat">💬 聊天记录</div>
+        <div class="sm-item" data-open="chat"><svg class="sm-ico"><use href="#ico-chat"/></svg> 聊天记录</div>
         <div class="sm-sep sm-programs">所有程序</div>
-        <div class="sm-item" data-open="decoder">🧮 解码器</div>
-        <div class="sm-item" data-open="cluelog">📓 线索本</div>
+        <div class="sm-item" data-open="decoder"><svg class="sm-ico"><use href="#ico-calc"/></svg> 解码器</div>
+        <div class="sm-item" data-open="cluelog"><svg class="sm-ico"><use href="#ico-nb"/></svg> 线索本</div>
       </div>
       <div id="sm-right">
-        <div class="sm-item" data-open="mydocs">🗂️ 我的文档</div>
-        <div class="sm-item" data-open="mycomputer">🖥️ 我的电脑</div>
+        <div class="sm-item" data-open="mydocs"><svg class="sm-ico"><use href="#ico-folder"/></svg> 我的文档</div>
+        <div class="sm-item" data-open="mycomputer"><svg class="sm-ico"><use href="#ico-pc"/></svg> 我的电脑</div>
         <div class="sm-item" id="sm-help">❓ 帮助</div>
         <div class="sm-item" id="sm-restart">🔁 重新启动</div>
       </div>

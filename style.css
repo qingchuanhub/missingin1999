@@ -30,7 +30,7 @@ html, body { width: 100%; height: 100%; overflow: hidden; font-family: Tahoma, "
 }
 #desktop-icons { position: absolute; top: 10px; left: 10px; display: flex; flex-direction: column; gap: 6px; z-index: 1; }
 .desk-icon { width: 76px; padding: 6px 4px; display: flex; flex-direction: column; align-items: center; gap: 3px; cursor: pointer; border-radius: 2px; }
-.desk-icon .ico { font-size: 32px; text-shadow: 0 1px 3px rgba(0,0,0,.5); }
+.desk-icon .ico-svg { width: 32px; height: 32px; display: block; filter: drop-shadow(0 1px 1px rgba(0,0,0,.4)); }
 .desk-icon span:last-child { color: #fff; font-size: 11px; text-align: center; text-shadow: 1px 1px 2px #000, -1px -1px 1px #000; }
 .desk-icon:hover { background: rgba(255,255,255,.2); outline: 1px dotted #fff; }
 .desk-icon.selected { background: rgba(49,106,197,.55); outline: 1px dotted #fff; }
@@ -59,9 +59,11 @@ html, body { width: 100%; height: 100%; overflow: hidden; font-family: Tahoma, "
 
 /* ---------- 任务栏 ---------- */
 #taskbar { position: fixed; bottom: 0; left: 0; right: 0; height: 30px; background: linear-gradient(180deg, #1f45fc 0%, #0a1fc9 4%, #0338f8 6%, #046bce 8%, #2b8ff6 50%, #0a5ac8 96%, #0a5ac8 100%); display: flex; align-items: center; padding: 0 4px; z-index: 1000; }
-#btn-start { height: 24px; display: flex; align-items: center; gap: 5px; background: linear-gradient(180deg, #55a34a 0%, #3c8b30 45%, #2f7324 100%); color: #fff; border: none; border-radius: 3px; padding: 0 12px; font-size: 13px; font-weight: bold; cursor: pointer; font-family: Tahoma, "Microsoft YaHei", sans-serif; text-shadow: 1px 1px 2px rgba(0,0,0,.5); box-shadow: inset 0 1px 0 rgba(255,255,255,.35); }
-#btn-start:active { background: linear-gradient(180deg, #2f7324, #3c8b30); }
-#start-flag { font-size: 16px; }
+#btn-start { height: 24px; display: flex; align-items: center; gap: 6px; background: linear-gradient(180deg, #55a34a 0%, #3c8b30 45%, #2f7324 100%); color: #fff; border: none; border-radius: 12px; padding: 0 13px 0 8px; font-size: 13px; font-weight: bold; cursor: pointer; font-family: Tahoma, "Microsoft YaHei", sans-serif; text-shadow: 1px 1px 2px rgba(0,0,0,.5); box-shadow: inset 0 1px 0 rgba(255,255,255,.45), inset 0 -1px 1px rgba(0,0,0,.25), 0 1px 0 rgba(0,0,0,.5); }
+#btn-start:active { background: linear-gradient(180deg, #2f7324, #3c8b30); box-shadow: inset 0 2px 3px rgba(0,0,0,.35); }
+#start-flag { display: flex; align-items: center; }
+.flag-svg { width: 18px; height: 18px; display: block; filter: drop-shadow(0 1px 1px rgba(0,0,0,.35)); }
+.sm-ico { width: 16px; height: 16px; vertical-align: -3px; margin-right: 5px; }
 #task-windows { display: flex; gap: 4px; margin-left: 10px; flex: 1; overflow-x: auto; }
 .task-btn { height: 22px; background: linear-gradient(180deg, #57a8ff 0%, #2f7fe0 45%, #1a62c4 100%); color: #fff; border: 1px solid #1a5eb0; border-radius: 3px; padding: 0 10px; font-size: 12px; cursor: pointer; box-shadow: inset 0 1px 0 rgba(255,255,255,.25); max-width: 150px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .task-btn.active { background: linear-gradient(180deg, #2f7fe0, #1a62c4 45%, #0f4fae); box-shadow: inset 0 2px 3px rgba(0,0,0,.25); }
