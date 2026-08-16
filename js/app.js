@@ -4,7 +4,7 @@
   var DATA = window.GAME_DATA;
   var SAVE_KEY = "linyuan_old_pc_v1";
 
-  var state = { flags: {} };
+  var state = { flags: {}, difficulty: "normal" };
   var winCounter = 0;
   var zCounter = 100;
   var windows = {};
@@ -13,12 +13,20 @@
   function load() {
     try {
       var raw = localStorage.getItem(SAVE_KEY);
-      if (raw) state.flags = JSON.parse(raw);
+      if (raw) {
+        var d = JSON.parse(raw);
+        if (d && d.flags) { state.flags = d.flags; state.difficulty = d.difficulty || "normal"; }
+        else state.flags = d || {};
+      }
     } catch (e) {}
   }
   function save() {
-    try { localStorage.setItem(SAVE_KEY, JSON.stringify(state.flags)); } catch (e) {}
+    try {
+      localStorage.setItem(SAVE_KEY, JSON.stringify({ flags: state.flags, difficulty: state.difficulty }));
+    } catch (e) {}
   }
+  function difficulty() { return state.difficulty; }
+  function setDifficulty(d) { state.difficulty = d; save(); }
   function flag(name) { return !!state.flags[name]; }
   function setFlag(name) {
     state.flags[name] = true;
@@ -173,8 +181,9 @@
   }
   function showHelp() {
     var n = hintLevel();
-    var h = DATA.hintLevels[n] || DATA.hintLevels[DATA.hintLevels.length - 1];
-    $("#help-text").innerHTML = "<b>当前进度：" + n + "/6</b><br>" + h.text;
+    var list = DATA.hints[difficulty()] || DATA.hints.normal;
+    var h = list[n] || list[list.length - 1];
+    $("#help-text").innerHTML = "<b>当前进度：" + n + "/6 · 难度：" + DATA.difficultyNames[difficulty()] + "</b><br>" + h.text;
     $("#help-dialog").classList.remove("hidden");
   }
 
@@ -276,13 +285,20 @@
     body.appendChild(holder);
   }
 
+  function diaryHint() {
+    var d = difficulty();
+    if (d === "easy") return DATA.files.diary.hintEasy;
+    if (d === "hard") return DATA.files.diary.hintHard;
+    return DATA.files.diary.hint;
+  }
+
   function openDiary() {
     if (!flag("diaryUnlocked")) {
       askPassword("加密日记.txt", "8012", function () {
         setFlag("diaryUnlocked");
         openNotepad("加密日记.txt", DATA.files.diary.content,
           el('<div style="margin-top:8px;color:#777;font-size:11px;">日记末尾的乱码，可能是某种编码。</div>'));
-      }, DATA.files.diary.hint);
+      }, diaryHint());
     } else {
       openNotepad("加密日记.txt", DATA.files.diary.content,
         el('<div style="margin-top:8px;color:#777;font-size:11px;">日记末尾的乱码，可能是某种编码。</div>'));
@@ -433,10 +449,10 @@
           '<button class="xp-btn" data-decode="' + i + '" style="padding:3px 14px;">解码</button>' +
         "</div>" +
         '<div class="decoder-out" id="dc-out' + i + '">结果会显示在这里</div>';
-      if (i === 0) {
+      if (i === 0 && difficulty() !== "hard") {
         out += '<div class="morse-table">摩尔斯表：<br>0=----- 1=.---- 2=..--- 3=...-- 4=....- 5=.....<br>6=-.... 7=--... 8=---.. 9=----.<br>A=.- B=-... C=-.-. D=-.. E=. F=..-.<br>G=--. H=.... I=.. J=.--- K=-.- L=.-..<br>M=-- N=-. O=--- P=.--. Q=--.- R=.-.<br>S=... T=- U=..- V=...- W=.-- X=-..- Y=-.-- Z=--..</div>';
       }
-      if (i === 3) {
+      if (i === 3 && difficulty() !== "hard") {
         out += '<div class="morse-table">凯撒密码：把每个字母按字母表往后移若干位。博客里的暗语是"右移5格"得到的，解码时就往回收5格（位移填 5）。</div>';
       }
       return out + "</div>";
@@ -493,13 +509,14 @@
   function openClueLog() {
     var w = createWindow({ title: "线索本", width: 440, height: 420 });
     var body = w.querySelector(".win-body");
-    var html = '<div style="font-size:12px;color:#666;margin-bottom:8px;">调查进度：' + hintLevel() + "/5</div>";
+    var html = '<div style="font-size:12px;color:#666;margin-bottom:8px;">调查进度：' + hintLevel() + "/5 · 难度：" + DATA.difficultyNames[difficulty()] + "</div>";
     html += '<div class="file-list">';
     DATA.clueLog.forEach(function (c, i) {
+      var txt = c[difficulty()] || c.text;
       var done = i === 0 || flag(c.flag);
       var icon = done ? "✔️" : "➜";
       var cls = done ? "clue-done" : "clue-next";
-      html += '<div class="file-item ' + cls + '" style="align-items:flex-start;"><span>' + icon + "</span><span>" + c.text + "</span></div>";
+      html += '<div class="file-item ' + cls + '" style="align-items:flex-start;"><span>' + icon + "</span><span>" + txt + "</span></div>";
     });
     html += "</div>";
     body.innerHTML = html;
@@ -633,9 +650,28 @@
     }
   }
 
+  /* ---------------- 登录难度选择 ---------------- */
+  function initLoginDifficulty() {
+    var cur = difficulty();
+    document.querySelectorAll(".diff-opt").forEach(function (o) {
+      var v = o.getAttribute("data-diff");
+      if (v === cur) {
+        o.classList.add("selected");
+        $("#diff-desc").textContent = DATA.difficultyDescs[cur];
+      }
+      o.addEventListener("click", function () {
+        setDifficulty(v);
+        document.querySelectorAll(".diff-opt").forEach(function (x) { x.classList.remove("selected"); });
+        o.classList.add("selected");
+        $("#diff-desc").textContent = DATA.difficultyDescs[v];
+      });
+    });
+  }
+
   /* ---------------- 启动 ---------------- */
   function init() {
     load();
+    initLoginDifficulty();
     $("#btn-login").addEventListener("click", showDesktop);
     $("#btn-close-end").addEventListener("click", function () {
       $("#ending").classList.add("hidden");

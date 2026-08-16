@@ -19,6 +19,11 @@ html, body { width: 100%; height: 100%; overflow: hidden; font-family: "Microsof
 .login-title { font-size: 18px; margin-bottom: 15px; color: #1e3c72; }
 .user-avatar { font-size: 64px; }
 .user-name { color: #555; margin: 8px 0 16px; }
+.login-diff { display: flex; gap: 6px; margin-bottom: 8px; }
+.diff-opt { flex: 1; padding: 6px 0; background: linear-gradient(180deg, #fff, #ece9d8); border: 1px solid #8b8b8b; border-radius: 3px; font-size: 13px; cursor: pointer; color: #333; }
+.diff-opt:hover { border-color: #f1b44c; }
+.diff-opt.selected { background: linear-gradient(180deg, #316ac5, #2456a0); color: #fff; border-color: #1c4c8f; }
+.diff-desc { font-size: 11px; color: #666; margin-bottom: 14px; min-height: 15px; }
 
 /* ---------- 桌面 ---------- */
 #desktop { background: linear-gradient(135deg, #3d8bd9 0%, #0e4e92 40%, #0a3a70 100%); }
